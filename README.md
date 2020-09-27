@@ -3,7 +3,7 @@ A Powercord plugin which allows you to copy role colors.
 
 Requires Developer Mode to be enabled.
 
-Thanks to Juby210 for his guild-profile plugin which helped me understand how to properly inject into the menu.
+Thanks to NurMarvin for his guild-profile plugin which helped me understand how to properly inject into the menu.
 
 ## Examples
 \#e67e22
