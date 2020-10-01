@@ -15,17 +15,22 @@ module.exports = class CopyRoleColor extends Plugin {
 
         inject(`${shorthand}-DeveloperContextMenu-default`, DeveloperContextMenu, "default", (args, res) => {
             const role = getGuild(getGuildId()).roles[args[0].id];
-            const color = `#${role.color.toString(16).padStart(6, "0")}`;
+            const hex = role.color.toString(16).padStart(6, "0");
+            const rgb = toRGB(hex);
 
-            res.props.children = [res.props.children];
-            res.props.children.push(
+            res.props.children = [
+                res.props.children,
                 React.createElement(Menu.MenuGroup, null, React.createElement(Menu.MenuItem, {
-                    id: shorthand,
-                    key: shorthand,
-                    label: "Copy Color",
-                    action: () => clipboard.writeText(color)
+                    id: shorthand + "-hex",
+                    label: "Copy Color (HEX)",
+                    action: () => clipboard.writeText("#" + hex)
+                })),
+                React.createElement(Menu.MenuGroup, null, React.createElement(Menu.MenuItem, {
+                    id: shorthand + "-rgb",
+                    label: "Copy Color (RGB)",
+                    action: () => clipboard.writeText(rgb)
                 }))
-            );
+            ];
             return res;
         });
         DeveloperContextMenu.default.displayName = "DeveloperContextMenu";
@@ -35,3 +40,8 @@ module.exports = class CopyRoleColor extends Plugin {
         uninject(`${shorthand}-DeveloperContextMenu-default`);
     }
 }
+
+const toRGB = hex => {
+    const rgb = hex.match(/.{1,2}/g);
+    return `rgb(${parseInt(rgb[0], 16)}, ${parseInt(rgb[1], 16)}, ${parseInt(rgb[2], 16)})`;
+};
